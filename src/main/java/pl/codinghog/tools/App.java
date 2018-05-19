@@ -1,6 +1,7 @@
 package pl.codinghog.tools;
 
 import org.apache.commons.cli.*;
+import pl.codinghog.tools.option.OptionsFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,24 +13,8 @@ import java.util.stream.Stream;
 public class App {
 
     public static void main(String[] args) {
-        Options options = new Options();
-
-        Option inputOption = Option.builder("i")
-                .argName("input")
-                .desc("input files")
-                .hasArgs()
-                .required()
-                .build();
-
-        Option outputOption = Option.builder("o")
-                .argName("output")
-                .desc("output file")
-                .hasArg()
-                .required()
-                .build();
-
-        options.addOption(inputOption);
-        options.addOption(outputOption);
+        OptionsFactory of = new OptionsFactory();
+        Options options = of.createOptions();
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
