@@ -41,6 +41,10 @@ public class App {
 
     private static void append(String filename, String outputname) {
         System.out.println(filename);
+        if(!filename.matches("^([a-zA-Z]:)(\\\\[a-zA-z0-9_-]+)+(\\\\[a-zA-Z0-9_-]+).txt")) {
+			System.out.println("Wrong path");
+			System.exit(0);
+		}
 
         Path outputPath = Paths.get(outputname);
         Path inputPath = Paths.get(filename);
