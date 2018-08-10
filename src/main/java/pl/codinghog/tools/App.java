@@ -60,8 +60,8 @@ public class App {
             Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             if(inputBytes[inputBytes.length-1] != 10) { 
-				Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-			}
+		Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+	    }
         } catch (IOException e) {
             System.out.println("ERROR");
         }
