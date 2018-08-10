@@ -32,6 +32,7 @@ public class App {
 
         String[] inputFilePaths = cmd.getOptionValues("i");
         String outputFilePath = cmd.getOptionValue("o");
+        boolean includHeader = cmd.hasOption("h");
 
         System.out.println(outputFilePath);
 
@@ -45,14 +46,13 @@ public class App {
         Path outputPath = Paths.get(outputname);
         Path inputPath = Paths.get(filename);
 
-
-        String header = String.join(
-                "\n",
-                "--------------------------------------------------------------------------------",
-                "-- " + inputPath.getFileName(),
-                "--------------------------------------------------------------------------------",
-                ""
-        );
+        String header = "";
+		if (includeHeader) {
+			header = String.join(System.lineSeparator(),
+					"--------------------------------------------------------------------------------",
+					inputPath.getFileName().toString(),
+					"--------------------------------------------------------------------------------", "");
+		}
 
         try {
             byte[] inputBytes = Files.readAllBytes(inputPath);
