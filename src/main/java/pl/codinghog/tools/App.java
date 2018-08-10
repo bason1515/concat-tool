@@ -40,19 +40,19 @@ public class App {
         System.out.println("DONE");
     }
 
-    private static void append(String filename, String outputname) {
+    private static void append(String filename, String outputname, boolean includeHeader) {
         System.out.println(filename);
 
         Path outputPath = Paths.get(outputname);
         Path inputPath = Paths.get(filename);
 
         String header = "";
-		if (includeHeader) {
-			header = String.join(System.lineSeparator(),
-					"--------------------------------------------------------------------------------",
-					inputPath.getFileName().toString(),
-					"--------------------------------------------------------------------------------", "");
-		}
+	if (includeHeader) {
+		header = String.join(System.lineSeparator(),
+				"--------------------------------------------------------------------------------",
+				inputPath.getFileName().toString(),
+				"--------------------------------------------------------------------------------", "");
+	}
 
         try {
             byte[] inputBytes = Files.readAllBytes(inputPath);
