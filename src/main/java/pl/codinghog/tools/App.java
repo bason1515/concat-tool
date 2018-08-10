@@ -32,6 +32,7 @@ public class App {
 
         String[] inputFilePaths = cmd.getOptionValues("i");
         String outputFilePath = cmd.getOptionValue("o");
+	boolean skipNewLine = cmd.hasOption("s");
 
         System.out.println(outputFilePath);
 
@@ -39,7 +40,7 @@ public class App {
         System.out.println("DONE");
     }
 
-    private static void append(String filename, String outputname) {
+    private static void append(String filename, String outputname, boolean skipNewLine) {
         System.out.println(filename);
 
         Path outputPath = Paths.get(outputname);
@@ -59,9 +60,9 @@ public class App {
 
             Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            if(inputBytes[inputBytes.length-1] != 10) { 
-				Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-			}
+            if(!skipNewLine && inputBytes[inputBytes.length-1] != 10) { 
+		Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+	    }
         } catch (IOException e) {
             System.out.println("ERROR");
         }
