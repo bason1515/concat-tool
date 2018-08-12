@@ -25,8 +25,6 @@ public class App {
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             formatter.printHelp("concat-tool", options);
-
-            System.exit(1);
             return;
         }
 
