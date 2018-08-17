@@ -12,56 +12,54 @@ import java.util.stream.Stream;
 
 public class App {
 
-    public static void main(String[] args) {
-        OptionsFactory of = new OptionsFactory();
-        Options options = of.createOptions();
+	public static void main(String[] args) {
+		OptionsFactory of = new OptionsFactory();
+		Options options = of.createOptions();
 
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd;
+		CommandLineParser parser = new DefaultParser();
+		HelpFormatter formatter = new HelpFormatter();
+		CommandLine cmd;
 
-        try {
-            cmd = parser.parse(options, args);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            formatter.printHelp("concat-tool", options);
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			System.out.println(e.getMessage());
+			formatter.printHelp("concat-tool", options);
 
-            System.exit(1);
-            return;
-        }
+			System.exit(1);
+			return;
+		}
 
-        String[] inputFilePaths = cmd.getOptionValues("i");
-        String outputFilePath = cmd.getOptionValue("o");
-        boolean includHeader = cmd.hasOption("h");
+		String[] inputFilePaths = cmd.getOptionValues("i");
+		String outputFilePath = cmd.getOptionValue("o");
+		boolean includHeader = cmd.hasOption("h");
 
-        System.out.println(outputFilePath);
+		System.out.println(outputFilePath);
 
-        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath));
-        System.out.println("DONE");
-    }
-
-    private static void append(String filename, String outputname, boolean includeHeader) {
-        System.out.println(filename);
-
-        Path outputPath = Paths.get(outputname);
-        Path inputPath = Paths.get(filename);
-
-        String header = "";
-	if (includeHeader) {
-		header = String.join(System.lineSeparator(),
-				"--------------------------------------------------------------------------------",
-				inputPath.getFileName().toString(),
-				"--------------------------------------------------------------------------------", "");
+		Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath, includHeader));
+		System.out.println("DONE");
 	}
 
-        try {
-            byte[] inputBytes = Files.readAllBytes(inputPath);
+	private static void append(String filename, String outputname, boolean includeHeader) {
+		System.out.println(filename);
 
-            Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            Files.write(outputPath, "\n\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            System.out.println("ERROR");
-        }
-    }
+		Path outputPath = Paths.get(outputname);
+		Path inputPath = Paths.get(filename);
+
+		try {
+			if (includeHeader) {
+				String header = String.join(System.lineSeparator(),
+						"--------------------------------------------------------------------------------",
+						inputPath.getFileName().toString(),
+						"--------------------------------------------------------------------------------", "");
+				Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			}
+			byte[] inputBytes = Files.readAllBytes(inputPath);
+
+			Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			Files.write(outputPath, "\n\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			System.out.println("ERROR");
+		}
+	}
 }
