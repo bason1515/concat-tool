@@ -30,32 +30,30 @@ public class App {
 
         String[] inputFilePaths = cmd.getOptionValues("i");
         String outputFilePath = cmd.getOptionValue("o");
+        boolean includeHeader = cmd.hasOption("h");
 
         System.out.println(outputFilePath);
 
-        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath));
+        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath, includeHeader));
         System.out.println("DONE");
     }
 
-    private static void append(String filename, String outputname) {
+    private static void append(String filename, String outputname, boolean includeHeader) {
         System.out.println(filename);
 
         Path outputPath = Paths.get(outputname);
         Path inputPath = Paths.get(filename);
 
-
-        String header = String.join(
-                "\n",
-                "--------------------------------------------------------------------------------",
-                "-- " + inputPath.getFileName(),
-                "--------------------------------------------------------------------------------",
-                ""
-        );
-
         try {
+            if (includeHeader) {
+                String header = String.join(System.lineSeparator(),
+                        "--------------------------------------------------------------------------------",
+                        inputPath.getFileName().toString(),
+                        "--------------------------------------------------------------------------------", "");
+                Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            }
             byte[] inputBytes = Files.readAllBytes(inputPath);
 
-            Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             Files.write(outputPath, "\n\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {

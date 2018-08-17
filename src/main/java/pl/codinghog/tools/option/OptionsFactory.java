@@ -22,11 +22,21 @@ public class OptionsFactory {
                 .required()
                 .build();
     }
+    
+    private Option getHeaderOption() {
+        return Option.builder("h")
+                .argName("header")
+                .desc("add header")
+                .hasArg(false)
+                .required(false)
+                .build();
+    }
 
     public Options createOptions() {
         Options options = new Options();
         options.addOption(getInputOptions());
         options.addOption(getOutputOption());
+        options.addOption(getHeaderOption());
 
         return options;
     }
