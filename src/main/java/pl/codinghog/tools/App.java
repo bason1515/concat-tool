@@ -32,11 +32,11 @@ public class App {
 
         String[] inputFilePaths = cmd.getOptionValues("i");
         String outputFilePath = cmd.getOptionValue("o");
-        boolean includHeader = cmd.hasOption("h");
+        boolean includeHeader = cmd.hasOption("h");
 
         System.out.println(outputFilePath);
 
-        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath, includHeader));
+        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath, includeHeader));
         System.out.println("DONE");
     }
 
