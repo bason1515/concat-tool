@@ -32,11 +32,11 @@ public class App {
 
         String[] inputFilePaths = cmd.getOptionValues("i");
         String outputFilePath = cmd.getOptionValue("o");
-	boolean skipNewLine = cmd.hasOption("s");
+        boolean skipNewLine = cmd.hasOption("s");
 
         System.out.println(outputFilePath);
 
-        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath));
+        Stream.of(inputFilePaths).forEach(e -> App.append(e, outputFilePath, skipNewLine));
         System.out.println("DONE");
     }
 
@@ -46,23 +46,20 @@ public class App {
         Path outputPath = Paths.get(outputname);
         Path inputPath = Paths.get(filename);
 
-
-        String header = String.join(
-                "\n",
+        String header = String.join("\n",
                 "--------------------------------------------------------------------------------",
                 "-- " + inputPath.getFileName(),
-                "--------------------------------------------------------------------------------",
-                ""
-        );
+                "--------------------------------------------------------------------------------", "");
 
         try {
             byte[] inputBytes = Files.readAllBytes(inputPath);
 
             Files.write(outputPath, header.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             Files.write(outputPath, inputBytes, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            if(!skipNewLine && inputBytes[inputBytes.length-1] != 10) { 
-		Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-	    }
+            if (!skipNewLine && inputBytes[inputBytes.length - 1] != '\n') {
+                Files.write(outputPath, System.lineSeparator().getBytes(), StandardOpenOption.CREATE,
+                        StandardOpenOption.APPEND);
+            }
         } catch (IOException e) {
             System.out.println("ERROR");
         }
